@@ -1,0 +1,1659 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+    <title>MJÖLNIR - Calcolatore Carico di Potenza | Nicholas Rubini</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Calcola il carico ottimale per massimizzare la potenza nel tuo allenamento. Zone forza-velocità, raccomandazioni personalizzate e export PDF.">
+    <meta name="keywords" content="calcolatore potenza, carico ottimale, VBT, forza velocità, powerlifting, strength training">
+    <meta name="author" content="Nicholas Rubini">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="MJÖLNIR - Calcolatore Carico di Potenza">
+    <meta property="og:description" content="Trova il carico ottimale per massimizzare la tua potenza. Tool gratuito basato sulla scienza.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://nicholasrubini.it/mjolnir">
+    
+    <!-- PWA & iOS -->
+    <meta name="theme-color" content="#0a0a0b">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="MJÖLNIR">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzBhMGEwYiIvPjx0ZXh0IHg9IjUwIiB5PSI2NSIgZm9udC1zaXplPSI0MCIgZmlsbD0iI2M5YTk2MiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+4ZuXPC90ZXh0Pjwvc3ZnPg==">
+    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiTUpPTE5JUiAtIENhbGNvbGF0b3JlIFBvdGVuemEiLCJzaG9ydF9uYW1lIjoiTUpPTE5JUiIsImRlc2NyaXB0aW9uIjoiQ2FsY29sYSBpbCBjYXJpY28gb3R0aW1hbGUgcGVyIGxhIG1hc3NpbWEgcG90ZW56YSIsInN0YXJ0X3VybCI6Ii4iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjMGEwYTBiIiwidGhlbWVfY29sb3IiOiIjYzlhOTYyIn0=">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- jsPDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <style>
+        :root {
+            --bg-primary: #0a0a0b;
+            --bg-secondary: #111113;
+            --bg-card: #161618;
+            --border-color: #2a2a2d;
+            --border-accent: #3a3a3d;
+            --gold: #c9a962;
+            --gold-light: #d4b978;
+            --gold-dark: #a68a4a;
+            --text-primary: #e8e6e3;
+            --text-secondary: #9a9a9a;
+            --text-muted: #666;
+            --zone-forza: #8b2635;
+            --zone-forza-vel: #c45e20;
+            --zone-potenza: #2d8a4e;
+            --zone-vel-forza: #2563a8;
+            --zone-velocita: #6b4c9a;
+            /* iOS safe areas */
+            --safe-top: env(safe-area-inset-top, 0px);
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+            --safe-left: env(safe-area-inset-left, 0px);
+            --safe-right: env(safe-area-inset-right, 0px);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        html { 
+            font-size: 16px; 
+            -webkit-text-size-adjust: 100%;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Raleway', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+            line-height: 1.6;
+            padding-top: var(--safe-top);
+            padding-bottom: calc(80px + var(--safe-bottom));
+            overscroll-behavior-y: contain;
+        }
+
+        /* Header - Compact on mobile */
+        .header {
+            text-align: center;
+            padding: 1.5rem 1rem 1.25rem;
+            padding-top: calc(1.5rem + var(--safe-top));
+            background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo-rune {
+            font-size: 2rem;
+            color: var(--gold);
+            text-shadow: 0 0 20px rgba(201, 169, 98, 0.3);
+        }
+
+        .header h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            color: var(--text-primary);
+            margin: 0.25rem 0;
+        }
+
+        .header h1 span { color: var(--gold); }
+
+        .header-subtitle {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-weight: 300;
+        }
+
+        /* PWA Banner */
+        .pwa-banner {
+            display: none;
+            background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold) 100%);
+            padding: 0.875rem 1rem;
+            text-align: center;
+            cursor: pointer;
+            -webkit-touch-callout: none;
+        }
+
+        .pwa-banner-text {
+            color: var(--bg-primary);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* Container */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 1rem;
+            padding-left: calc(1rem + var(--safe-left));
+            padding-right: calc(1rem + var(--safe-right));
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .card-body { padding: 1.25rem; }
+
+        /* Tabs - Mobile optimized */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            background: var(--bg-card);
+            z-index: 10;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 1rem 0.5rem;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-family: 'Raleway', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            position: relative;
+            min-height: 48px; /* iOS touch target */
+            transition: color 0.2s;
+        }
+
+        .tab-btn:active { background: rgba(201, 169, 98, 0.1); }
+        .tab-btn.active { color: var(--gold); }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gold);
+        }
+
+        .tab-content {
+            display: none;
+            padding: 1.25rem;
+        }
+
+        .tab-content.active { display: block; }
+
+        /* Form Elements - Touch optimized */
+        .form-group { margin-bottom: 1.25rem; }
+
+        .form-label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-family: 'Raleway', sans-serif;
+            font-size: 16px; /* Prevents iOS zoom */
+            min-height: 52px;
+            transition: border-color 0.2s;
+            -webkit-appearance: none;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+
+        .form-select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239a9a9a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            padding-right: 2.5rem;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+
+        .input-with-btn {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .input-with-btn .form-input { flex: 1; }
+
+        .btn-small {
+            padding: 1rem 0.75rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            cursor: pointer;
+            white-space: nowrap;
+            min-height: 52px;
+            min-width: 48px;
+        }
+
+        .btn-small:active {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        /* Primary Button */
+        .btn-primary {
+            width: 100%;
+            padding: 1.125rem 1.5rem;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+            border: none;
+            border-radius: 12px;
+            color: var(--bg-primary);
+            font-family: 'Cinzel', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            cursor: pointer;
+            min-height: 56px;
+            -webkit-touch-callout: none;
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+            filter: brightness(0.95);
+        }
+
+        /* Results */
+        .result-hero {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .result-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.25rem 1rem;
+            text-align: center;
+        }
+
+        .result-box.highlight {
+            border-color: var(--gold);
+            background: linear-gradient(135deg, rgba(201, 169, 98, 0.15) 0%, rgba(166, 138, 74, 0.08) 100%);
+        }
+
+        .result-value {
+            font-family: 'Cinzel', serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.2;
+        }
+
+        .result-box.highlight .result-value { color: var(--gold); }
+
+        .result-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        /* Action Buttons - Horizontal scroll on mobile */
+        .action-buttons {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-action {
+            flex: 1;
+            padding: 0.875rem 0.75rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-secondary);
+            font-family: 'Raleway', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            min-height: 48px;
+            -webkit-touch-callout: none;
+        }
+
+        .btn-action:active {
+            border-color: var(--gold);
+            color: var(--gold);
+            transform: scale(0.98);
+        }
+
+        .btn-action.instagram {
+            background: linear-gradient(135deg, #833AB4 0%, #FD1D1D 50%, #F77737 100%);
+            border: none;
+            color: white;
+        }
+
+        .btn-action.instagram:active {
+            filter: brightness(0.9);
+            color: white;
+        }
+
+        /* Zones */
+        .zones-section { margin-bottom: 1.5rem; }
+
+        .section-title {
+            font-family: 'Cinzel', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border-color);
+        }
+
+        .zones-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.4rem;
+        }
+
+        @media (max-width: 420px) {
+            .zones-grid { 
+                grid-template-columns: repeat(3, 1fr); 
+                gap: 0.5rem;
+            }
+        }
+
+        .zone-card {
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            padding: 0.75rem 0.5rem;
+            text-align: center;
+            border: 2px solid var(--border-color);
+            cursor: pointer;
+            position: relative;
+            min-height: 90px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            -webkit-touch-callout: none;
+        }
+
+        .zone-card:active { transform: scale(0.97); }
+
+        .zone-card[data-zone="forza"] { border-color: var(--zone-forza); }
+        .zone-card[data-zone="forza-vel"] { border-color: var(--zone-forza-vel); }
+        .zone-card[data-zone="potenza"] { border-color: var(--zone-potenza); }
+        .zone-card[data-zone="vel-forza"] { border-color: var(--zone-vel-forza); }
+        .zone-card[data-zone="velocita"] { border-color: var(--zone-velocita); }
+
+        .zone-card.active { 
+            border-width: 3px;
+            box-shadow: 0 0 15px rgba(45, 138, 78, 0.3);
+        }
+
+        .zone-info-icon {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            font-size: 0.6rem;
+            opacity: 0.5;
+        }
+
+        .zone-name {
+            font-size: 0.6rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            margin-bottom: 0.3rem;
+        }
+
+        .zone-card[data-zone="forza"] .zone-name { color: var(--zone-forza); }
+        .zone-card[data-zone="forza-vel"] .zone-name { color: var(--zone-forza-vel); }
+        .zone-card[data-zone="potenza"] .zone-name { color: var(--zone-potenza); }
+        .zone-card[data-zone="vel-forza"] .zone-name { color: var(--zone-vel-forza); }
+        .zone-card[data-zone="velocita"] .zone-name { color: var(--zone-velocita); }
+
+        .zone-weight {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .zone-percent {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+        }
+
+        .zone-velocity {
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        .zones-hint {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+            text-align: center;
+        }
+
+        /* Toggle */
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .toggle-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .toggle {
+            position: relative;
+            width: 44px;
+            height: 26px;
+        }
+
+        .toggle input { opacity: 0; width: 0; height: 0; }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            inset: 0;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 26px;
+            transition: all 0.2s;
+        }
+
+        .toggle-slider::before {
+            content: '';
+            position: absolute;
+            height: 20px;
+            width: 20px;
+            left: 2px;
+            bottom: 2px;
+            background: var(--text-secondary);
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+
+        .toggle input:checked + .toggle-slider { border-color: var(--gold); }
+        .toggle input:checked + .toggle-slider::before {
+            transform: translateX(18px);
+            background: var(--gold);
+        }
+
+        /* Chart */
+        .chart-container {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-canvas {
+            width: 100%;
+            height: 160px;
+            display: block;
+        }
+
+        /* Recommendations */
+        .recommendations {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .recommendation-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.6rem;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .recommendation-item:last-child { border-bottom: none; padding-bottom: 0; }
+        .recommendation-item:first-child { padding-top: 0; }
+
+        .rec-icon {
+            color: var(--gold);
+            font-size: 0.85rem;
+        }
+
+        .rec-text {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .rec-text strong { color: var(--text-primary); }
+
+        /* STICKY CTA - Mobile */
+        .sticky-cta {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(180deg, transparent 0%, var(--bg-primary) 20%);
+            padding: 1rem;
+            padding-bottom: calc(1rem + var(--safe-bottom));
+            z-index: 100;
+            display: none;
+        }
+
+        .sticky-cta.visible { display: block; }
+
+        .sticky-cta-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+            border: none;
+            border-radius: 14px;
+            color: var(--bg-primary);
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-decoration: none;
+            min-height: 56px;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3), 0 4px 15px rgba(201, 169, 98, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        .sticky-cta-btn:active {
+            transform: scale(0.98);
+            animation: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3), 0 4px 15px rgba(201, 169, 98, 0.3); }
+            50% { box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3), 0 4px 25px rgba(201, 169, 98, 0.5); }
+        }
+
+        .sticky-cta-icon { font-size: 1.25rem; }
+
+        /* Inline CTA - Desktop only */
+        .inline-cta {
+            display: none;
+            background: linear-gradient(135deg, rgba(201, 169, 98, 0.2) 0%, rgba(166, 138, 74, 0.1) 100%);
+            border: 2px solid var(--gold);
+            border-radius: 14px;
+            padding: 1.5rem;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .inline-cta { display: block; }
+            .sticky-cta { display: none !important; }
+            body { padding-bottom: 0; }
+        }
+
+        .inline-cta-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+
+        .inline-cta-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .inline-cta-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .inline-cta-btn {
+            display: inline-block;
+            padding: 0.875rem 2rem;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+            border-radius: 10px;
+            color: var(--bg-primary);
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        /* History */
+        .history-empty {
+            text-align: center;
+            padding: 2.5rem 1rem;
+            color: var(--text-muted);
+        }
+
+        .history-empty-icon {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+            opacity: 0.5;
+        }
+
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .history-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .history-exercise {
+            font-family: 'Cinzel', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .history-date {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .history-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+        }
+
+        .history-stat { text-align: center; }
+
+        .history-stat-value {
+            font-family: 'Cinzel', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--gold);
+        }
+
+        .history-stat-label {
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            margin-top: 0.15rem;
+        }
+
+        .history-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .btn-ghost {
+            flex: 1;
+            padding: 0.625rem 0.75rem;
+            background: none;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            cursor: pointer;
+            min-height: 44px;
+        }
+
+        .btn-ghost:active { border-color: var(--gold); color: var(--gold); }
+        .btn-ghost.danger:active { border-color: var(--zone-forza); color: var(--zone-forza); }
+
+        /* Info Cards - Sidebar on desktop, collapsible on mobile */
+        .info-section {
+            margin-top: 1rem;
+        }
+
+        .info-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .info-card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-card-icon { color: var(--gold); font-size: 1rem; }
+
+        .info-card-title {
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .info-card-text {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Modals */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px 20px 0 0;
+            width: 100%;
+            max-width: 500px;
+            max-height: 85vh;
+            overflow-y: auto;
+            transform: translateY(100%);
+            transition: transform 0.3s;
+            padding-bottom: var(--safe-bottom);
+        }
+
+        .modal-overlay.active .modal { transform: translateY(0); }
+
+        @media (min-width: 768px) {
+            .modal {
+                border-radius: 16px;
+                max-height: 80vh;
+                align-self: center;
+            }
+        }
+
+        .modal-handle {
+            width: 36px;
+            height: 4px;
+            background: var(--border-accent);
+            border-radius: 2px;
+            margin: 0.75rem auto;
+        }
+
+        .modal-header {
+            padding: 0 1.25rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            min-width: 44px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-body { padding: 1.25rem; }
+
+        .modal-result {
+            text-align: center;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            margin-top: 1rem;
+        }
+
+        .modal-result-value {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        .modal-result-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Zone Info */
+        .zone-info-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .zone-info-badge {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .zone-info-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .zone-info-subtitle {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .zone-info-section { margin-bottom: 1rem; }
+
+        .zone-info-section-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.4rem;
+        }
+
+        .zone-info-section-text {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .zone-info-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .zone-info-list li {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            padding: 0.2rem 0 0.2rem 1.1rem;
+            position: relative;
+        }
+
+        .zone-info-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--gold);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 1.5rem 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-text {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .footer-brand {
+            color: var(--gold);
+            text-decoration: none;
+        }
+
+        /* Desktop adjustments */
+        @media (min-width: 768px) {
+            .header { padding: 2rem 1.5rem; }
+            .header h1 { font-size: 2rem; }
+            .logo-rune { font-size: 2.5rem; }
+            .container { max-width: 700px; padding: 1.5rem; }
+            .result-value { font-size: 2rem; }
+            .zone-card { padding: 1rem 0.75rem; }
+            .zone-name { font-size: 0.7rem; }
+            .zone-weight { font-size: 1.25rem; }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in { animation: fadeIn 0.3s ease forwards; }
+
+        /* Hidden canvas */
+        .hidden-canvas {
+            position: absolute;
+            left: -9999px;
+            top: -9999px;
+        }
+
+        /* iOS specific fixes */
+        @supports (-webkit-touch-callout: none) {
+            .form-input, .form-select {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="pwa-banner" id="pwaBanner" onclick="installPWA()">
+        <span class="pwa-banner-text">📲 Installa MJÖLNIR per accesso rapido in palestra</span>
+    </div>
+
+    <header class="header">
+        <div class="logo-rune">ᛗ</div>
+        <h1><span>MJÖLNIR</span></h1>
+        <p class="header-subtitle">Calcolatore Carico di Potenza</p>
+    </header>
+
+    <main class="container">
+        <div class="card">
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="calculator">Calcola</button>
+                <button class="tab-btn" data-tab="results">Risultati</button>
+                <button class="tab-btn" data-tab="history">Storico</button>
+            </div>
+
+            <div id="calculator" class="tab-content active">
+                <div class="form-group">
+                    <label class="form-label">Esercizio</label>
+                    <select id="exercise" class="form-select">
+                        <option value="squat">Squat</option>
+                        <option value="bench" selected>Panca Piana</option>
+                        <option value="deadlift">Stacco da Terra</option>
+                        <option value="overhead">Military Press</option>
+                        <option value="row">Rematore</option>
+                        <option value="clean">Girata</option>
+                        <option value="snatch">Strappo</option>
+                        <option value="jump_squat">Jump Squat</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">1RM (kg)</label>
+                    <div class="input-with-btn">
+                        <input type="number" id="oneRM" class="form-input" placeholder="Es. 100" inputmode="decimal">
+                        <button class="btn-small" onclick="openModal('rm-modal')">⚖️</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Obiettivo</label>
+                    <select id="goal" class="form-select">
+                        <option value="power">Max Potenza</option>
+                        <option value="strength-speed">Forza-Velocità</option>
+                        <option value="speed-strength">Velocità-Forza</option>
+                    </select>
+                </div>
+
+                <button class="btn-primary" onclick="calculate()">CALCOLA CARICO</button>
+
+                <div class="info-section">
+                    <div class="info-card">
+                        <div class="info-card-header">
+                            <span class="info-card-icon">⚡</span>
+                            <h3 class="info-card-title">Come Funziona</h3>
+                        </div>
+                        <p class="info-card-text">
+                            Calcola il carico ottimale per massimizzare la potenza basandosi sui profili forza-velocità della letteratura scientifica.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="results" class="tab-content">
+                <div id="results-placeholder" class="history-empty">
+                    <div class="history-empty-icon">⚡</div>
+                    <p>Calcola il tuo carico ottimale</p>
+                </div>
+
+                <div id="results-content" style="display: none;">
+                    <div class="result-hero">
+                        <div class="result-box highlight">
+                            <div class="result-value" id="optimal-percent">-</div>
+                            <div class="result-label">del 1RM</div>
+                        </div>
+                        <div class="result-box">
+                            <div class="result-value" id="optimal-weight">-</div>
+                            <div class="result-label">Peso Ottimale</div>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn-action instagram" onclick="shareInstagram()">
+                            📸 Instagram
+                        </button>
+                        <button class="btn-action" onclick="downloadPDF()">
+                            📄 PDF
+                        </button>
+                    </div>
+
+                    <div class="zones-section">
+                        <div class="section-title">Zone Forza-Velocità</div>
+                        <div class="toggle-container">
+                            <span class="toggle-label">Velocità</span>
+                            <label class="toggle">
+                                <input type="checkbox" id="showVelocity" checked onchange="toggleVelocity()">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="zones-grid" id="zones-grid"></div>
+                        <p class="zones-hint">💡 Tocca per info dettagliate</p>
+                    </div>
+
+                    <div class="chart-container">
+                        <div class="section-title" style="margin-bottom: 0.75rem;">Curva Potenza-Carico</div>
+                        <canvas id="powerChart" class="chart-canvas"></canvas>
+                    </div>
+
+                    <div class="recommendations">
+                        <div class="section-title" style="margin-bottom: 0.5rem;">Raccomandazioni</div>
+                        <div id="recommendations-list"></div>
+                    </div>
+
+                    <!-- Desktop CTA -->
+                    <div class="inline-cta">
+                        <div class="inline-cta-icon">⚔️</div>
+                        <div class="inline-cta-title">Vuoi Migliorare Potenza e Performance?</div>
+                        <p class="inline-cta-text">Scopri quale programma è perfetto per i tuoi obiettivi.</p>
+                        <a href="https://scheda.nicholasrubini.it/" target="_blank" class="inline-cta-btn">TROVA LA TUA SCHEDA →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div id="history" class="tab-content">
+                <div id="history-empty" class="history-empty">
+                    <div class="history-empty-icon">📜</div>
+                    <p>Nessun calcolo salvato</p>
+                </div>
+                <div id="history-list" class="history-list"></div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p class="footer-text">
+            <a href="https://nicholasrubini.it" target="_blank" class="footer-brand">Nicholas Rubini</a> — Train Like a Viking
+        </p>
+    </footer>
+
+    <!-- Sticky CTA - Mobile only -->
+    <div class="sticky-cta" id="stickyCta">
+        <a href="https://scheda.nicholasrubini.it/" target="_blank" class="sticky-cta-btn">
+            <span class="sticky-cta-icon">⚔️</span>
+            TROVA LA TUA SCHEDA IDEALE
+        </a>
+    </div>
+
+    <!-- 1RM Modal -->
+    <div class="modal-overlay" id="rm-modal">
+        <div class="modal">
+            <div class="modal-handle"></div>
+            <div class="modal-header">
+                <h3>Calcola 1RM</h3>
+                <button class="modal-close" onclick="closeModal('rm-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Peso Sollevato (kg)</label>
+                    <input type="number" id="modal-weight" class="form-input" placeholder="Es. 80" inputmode="decimal">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Ripetizioni (1-15)</label>
+                    <input type="number" id="modal-reps" class="form-input" placeholder="Es. 5" inputmode="numeric" min="1" max="15">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Formula</label>
+                    <select id="modal-formula" class="form-select">
+                        <option value="epley">Epley</option>
+                        <option value="brzycki">Brzycki</option>
+                        <option value="lander">Lander</option>
+                    </select>
+                </div>
+                <button class="btn-primary" onclick="calculate1RM()">CALCOLA</button>
+                <div class="modal-result" id="modal-result" style="display: none;">
+                    <div class="modal-result-value" id="modal-result-value">-</div>
+                    <div class="modal-result-label">1RM Stimato (kg)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Zone Info Modal -->
+    <div class="modal-overlay" id="zone-modal">
+        <div class="modal">
+            <div class="modal-handle"></div>
+            <div class="modal-header">
+                <h3>Dettagli Zona</h3>
+                <button class="modal-close" onclick="closeModal('zone-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="zone-info-content"></div>
+            </div>
+        </div>
+    </div>
+
+    <canvas id="instagramCanvas" class="hidden-canvas" width="1080" height="1920"></canvas>
+
+    <script>
+        const exerciseData = {
+            squat: { name: 'Squat', optimalPower: 55, zones: { forza: { percent: 90, velocity: '0.15-0.35' }, forzaVel: { percent: 80, velocity: '0.35-0.5' }, potenza: { percent: 55, velocity: '0.5-0.75' }, velForza: { percent: 40, velocity: '0.75-1.0' }, velocita: { percent: 25, velocity: '1.0-1.3' } } },
+            bench: { name: 'Panca Piana', optimalPower: 50, zones: { forza: { percent: 90, velocity: '0.15-0.35' }, forzaVel: { percent: 80, velocity: '0.35-0.5' }, potenza: { percent: 50, velocity: '0.5-0.75' }, velForza: { percent: 35, velocity: '0.75-1.0' }, velocita: { percent: 20, velocity: '1.0-1.3' } } },
+            deadlift: { name: 'Stacco', optimalPower: 60, zones: { forza: { percent: 90, velocity: '0.15-0.35' }, forzaVel: { percent: 80, velocity: '0.35-0.5' }, potenza: { percent: 60, velocity: '0.5-0.75' }, velForza: { percent: 45, velocity: '0.75-1.0' }, velocita: { percent: 30, velocity: '1.0-1.3' } } },
+            overhead: { name: 'Military Press', optimalPower: 45, zones: { forza: { percent: 90, velocity: '0.15-0.35' }, forzaVel: { percent: 75, velocity: '0.35-0.5' }, potenza: { percent: 45, velocity: '0.5-0.75' }, velForza: { percent: 30, velocity: '0.75-1.0' }, velocita: { percent: 20, velocity: '1.0-1.3' } } },
+            row: { name: 'Rematore', optimalPower: 55, zones: { forza: { percent: 90, velocity: '0.15-0.35' }, forzaVel: { percent: 80, velocity: '0.35-0.5' }, potenza: { percent: 55, velocity: '0.5-0.75' }, velForza: { percent: 40, velocity: '0.75-1.0' }, velocita: { percent: 25, velocity: '1.0-1.3' } } },
+            clean: { name: 'Girata', optimalPower: 70, zones: { forza: { percent: 95, velocity: '0.1-0.3' }, forzaVel: { percent: 85, velocity: '0.3-0.5' }, potenza: { percent: 70, velocity: '0.5-0.8' }, velForza: { percent: 55, velocity: '0.8-1.1' }, velocita: { percent: 40, velocity: '1.1-1.5' } } },
+            snatch: { name: 'Strappo', optimalPower: 65, zones: { forza: { percent: 95, velocity: '0.1-0.3' }, forzaVel: { percent: 85, velocity: '0.3-0.5' }, potenza: { percent: 65, velocity: '0.5-0.9' }, velForza: { percent: 50, velocity: '0.9-1.2' }, velocita: { percent: 35, velocity: '1.2-1.6' } } },
+            jump_squat: { name: 'Jump Squat', optimalPower: 30, zones: { forza: { percent: 70, velocity: '0.3-0.5' }, forzaVel: { percent: 55, velocity: '0.5-0.7' }, potenza: { percent: 30, velocity: '0.7-1.0' }, velForza: { percent: 15, velocity: '1.0-1.3' }, velocita: { percent: 0, velocity: '1.3+' } } }
+        };
+
+        const zoneInfo = {
+            forza: { name: 'Forza Massima', color: '#8b2635', icon: '🏋️', description: 'Massima tensione muscolare possibile.', benefits: ['Forza assoluta', 'Reclutamento fibre', 'Base per tutte le qualità'], training: 'Carichi 85-95% 1RM, 1-5 rep, recuperi 3-5 min.', frequency: '1-2x/settimana' },
+            forzaVel: { name: 'Forza-Velocità', color: '#c45e20', icon: '💪', description: 'Forza dominante con componente velocità.', benefits: ['Potenza con enfasi forza', 'Transfert esplosivo', 'Ipertrofia funzionale'], training: 'Carichi 70-85% 1RM, 3-5 rep esplosive.', frequency: '1-2x/settimana' },
+            potenza: { name: 'Potenza Massima', color: '#2d8a4e', icon: '⚡', description: 'Punto ottimale forza × velocità.', benefits: ['Massima potenza', 'Ideale per esplosività', 'Rate of force development'], training: 'Carichi 40-60% 1RM, 3-6 rep max velocità.', frequency: '2-3x/settimana' },
+            velForza: { name: 'Velocità-Forza', color: '#2563a8', icon: '🚀', description: 'Velocità dominante con carico moderato.', benefits: ['Velocità sotto carico', 'Componente veloce', 'Reattività muscolare'], training: 'Carichi 30-50% 1RM, 4-8 rep accelerazione max.', frequency: '2-3x/settimana' },
+            velocita: { name: 'Velocità Massima', color: '#6b4c9a', icon: '💨', description: 'Carichi minimi, velocità massima.', benefits: ['Velocità contrazione max', 'Sistema nervoso', 'Rapidità attivazione'], training: 'Carichi 0-30% 1RM, movimenti balistici.', frequency: '2-4x/settimana' }
+        };
+
+        let currentResult = null;
+        let history = JSON.parse(localStorage.getItem('mjolnir_history') || '[]');
+        let deferredPrompt = null;
+
+        // PWA
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('pwaBanner').style.display = 'block';
+        });
+
+        function installPWA() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then(() => {
+                    document.getElementById('pwaBanner').style.display = 'none';
+                    deferredPrompt = null;
+                });
+            }
+        }
+
+        // Tabs
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById(btn.dataset.tab).classList.add('active');
+                
+                // Show/hide sticky CTA
+                updateStickyCta();
+            });
+        });
+
+        function updateStickyCta() {
+            const resultsTab = document.getElementById('results');
+            const stickyCta = document.getElementById('stickyCta');
+            const hasResults = currentResult !== null;
+            const isResultsTab = resultsTab.classList.contains('active');
+            
+            if (hasResults && isResultsTab && window.innerWidth < 768) {
+                stickyCta.classList.add('visible');
+            } else {
+                stickyCta.classList.remove('visible');
+            }
+        }
+
+        // Modals
+        function openModal(id) { 
+            document.getElementById(id).classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeModal(id) { 
+            document.getElementById(id).classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        document.querySelectorAll('.modal-overlay').forEach(m => {
+            m.addEventListener('click', (e) => { 
+                if (e.target.classList.contains('modal-overlay')) {
+                    m.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+        });
+
+        // Calculate
+        function calculate() {
+            const exercise = document.getElementById('exercise').value;
+            const oneRM = parseFloat(document.getElementById('oneRM').value);
+            const goal = document.getElementById('goal').value;
+
+            if (!oneRM || oneRM <= 0) { 
+                alert('Inserisci un valore valido per il 1RM'); 
+                return; 
+            }
+
+            const data = exerciseData[exercise];
+            let optimalPercent = data.optimalPower;
+            if (goal === 'strength-speed') optimalPercent = Math.min(optimalPercent + 15, 85);
+            else if (goal === 'speed-strength') optimalPercent = Math.max(optimalPercent - 15, 20);
+
+            currentResult = {
+                exercise: data.name, 
+                exerciseKey: exercise, 
+                oneRM,
+                optimalPercent, 
+                optimalWeight: Math.round(oneRM * optimalPercent / 100),
+                zones: data.zones, 
+                goal, 
+                date: new Date().toISOString()
+            };
+
+            displayResults();
+            saveToHistory();
+
+            // Switch to results
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelector('[data-tab="results"]').classList.add('active');
+            document.getElementById('results').classList.add('active');
+            
+            updateStickyCta();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function displayResults() {
+            document.getElementById('results-placeholder').style.display = 'none';
+            document.getElementById('results-content').style.display = 'block';
+            document.getElementById('results-content').classList.add('fade-in');
+
+            document.getElementById('optimal-percent').textContent = currentResult.optimalPercent + '%';
+            document.getElementById('optimal-weight').textContent = currentResult.optimalWeight + ' kg';
+
+            const zones = currentResult.zones;
+            const showVel = document.getElementById('showVelocity').checked;
+
+            document.getElementById('zones-grid').innerHTML = `
+                <div class="zone-card" data-zone="forza" onclick="showZoneInfo('forza')"><span class="zone-info-icon">ℹ️</span><div class="zone-name">Forza</div><div class="zone-weight">${Math.round(currentResult.oneRM * zones.forza.percent / 100)}</div><div class="zone-percent">${zones.forza.percent}%</div><div class="zone-velocity" style="${showVel ? '' : 'display:none'}">${zones.forza.velocity}</div></div>
+                <div class="zone-card" data-zone="forza-vel" onclick="showZoneInfo('forzaVel')"><span class="zone-info-icon">ℹ️</span><div class="zone-name">F-Vel</div><div class="zone-weight">${Math.round(currentResult.oneRM * zones.forzaVel.percent / 100)}</div><div class="zone-percent">${zones.forzaVel.percent}%</div><div class="zone-velocity" style="${showVel ? '' : 'display:none'}">${zones.forzaVel.velocity}</div></div>
+                <div class="zone-card active" data-zone="potenza" onclick="showZoneInfo('potenza')"><span class="zone-info-icon">ℹ️</span><div class="zone-name">Potenza</div><div class="zone-weight">${Math.round(currentResult.oneRM * zones.potenza.percent / 100)}</div><div class="zone-percent">${zones.potenza.percent}%</div><div class="zone-velocity" style="${showVel ? '' : 'display:none'}">${zones.potenza.velocity}</div></div>
+                <div class="zone-card" data-zone="vel-forza" onclick="showZoneInfo('velForza')"><span class="zone-info-icon">ℹ️</span><div class="zone-name">V-For</div><div class="zone-weight">${Math.round(currentResult.oneRM * zones.velForza.percent / 100)}</div><div class="zone-percent">${zones.velForza.percent}%</div><div class="zone-velocity" style="${showVel ? '' : 'display:none'}">${zones.velForza.velocity}</div></div>
+                <div class="zone-card" data-zone="velocita" onclick="showZoneInfo('velocita')"><span class="zone-info-icon">ℹ️</span><div class="zone-name">Speed</div><div class="zone-weight">${Math.round(currentResult.oneRM * zones.velocita.percent / 100)}</div><div class="zone-percent">${zones.velocita.percent}%</div><div class="zone-velocity" style="${showVel ? '' : 'display:none'}">${zones.velocita.velocity}</div></div>
+            `;
+
+            setTimeout(drawPowerChart, 50);
+
+            const reps = currentResult.optimalPercent >= 60 ? '3-5' : '3-6';
+            const sets = currentResult.optimalPercent >= 60 ? '4-6' : '3-5';
+            document.getElementById('recommendations-list').innerHTML = `
+                <div class="recommendation-item"><span class="rec-icon">⚡</span><span class="rec-text">Carico: <strong>${currentResult.optimalPercent}% (${currentResult.optimalWeight} kg)</strong></span></div>
+                <div class="recommendation-item"><span class="rec-icon">📊</span><span class="rec-text">Volume: <strong>${sets} x ${reps} rep</strong></span></div>
+                <div class="recommendation-item"><span class="rec-icon">🚀</span><span class="rec-text">Focus: <strong>movimento esplosivo</strong></span></div>
+                <div class="recommendation-item"><span class="rec-icon">⏱️</span><span class="rec-text">Recupero: <strong>2-3 minuti</strong></span></div>
+            `;
+        }
+
+        function showZoneInfo(key) {
+            const z = zoneInfo[key];
+            const zoneData = currentResult?.zones[key];
+            const weight = currentResult ? Math.round(currentResult.oneRM * zoneData.percent / 100) : '';
+            
+            document.getElementById('zone-info-content').innerHTML = `
+                <div class="zone-info-header">
+                    <div class="zone-info-badge" style="background:${z.color}22;color:${z.color}">${z.icon}</div>
+                    <div><div class="zone-info-title" style="color:${z.color}">${z.name}</div>${weight ? `<div class="zone-info-subtitle">${weight} kg per te</div>` : ''}</div>
+                </div>
+                <div class="zone-info-section"><div class="zone-info-section-title">Cos'è</div><p class="zone-info-section-text">${z.description}</p></div>
+                <div class="zone-info-section"><div class="zone-info-section-title">Benefici</div><ul class="zone-info-list">${z.benefits.map(b => `<li>${b}</li>`).join('')}</ul></div>
+                <div class="zone-info-section"><div class="zone-info-section-title">Allenamento</div><p class="zone-info-section-text">${z.training}</p></div>
+                <div class="zone-info-section"><div class="zone-info-section-title">Frequenza</div><p class="zone-info-section-text">${z.frequency}</p></div>
+            `;
+            openModal('zone-modal');
+        }
+
+        function toggleVelocity() {
+            const show = document.getElementById('showVelocity').checked;
+            document.querySelectorAll('.zone-velocity').forEach(el => el.style.display = show ? '' : 'none');
+        }
+
+        function drawPowerChart() {
+            const canvas = document.getElementById('powerChart');
+            if (!canvas || !currentResult) return;
+            const ctx = canvas.getContext('2d');
+            const container = canvas.parentElement;
+            let w = container.clientWidth - 32;
+            if (w < 100) w = 300;
+            const h = 160;
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = w * dpr;
+            canvas.height = h * dpr;
+            canvas.style.width = w + 'px';
+            canvas.style.height = h + 'px';
+            ctx.scale(dpr, dpr);
+
+            const pad = { top: 15, right: 15, bottom: 35, left: 40 };
+            ctx.clearRect(0, 0, w, h);
+
+            const opt = currentResult.optimalPercent;
+            const pts = [];
+            for (let p = 20; p <= 95; p += 5) {
+                pts.push({ percent: p, power: Math.max(100 - Math.pow((p - opt) / 2.5, 2) * 0.15, 10) });
+            }
+
+            const xS = p => pad.left + (p - 20) / 75 * (w - pad.left - pad.right);
+            const yS = v => h - pad.bottom - (v / 100) * (h - pad.top - pad.bottom);
+
+            ctx.strokeStyle = '#2a2a2d'; ctx.lineWidth = 0.5;
+            for (let y = 0; y <= 100; y += 25) { ctx.beginPath(); ctx.moveTo(pad.left, yS(y)); ctx.lineTo(w - pad.right, yS(y)); ctx.stroke(); }
+
+            ctx.beginPath(); ctx.strokeStyle = '#2d8a4e'; ctx.lineWidth = 2.5;
+            pts.forEach((p, i) => i === 0 ? ctx.moveTo(xS(p.percent), yS(p.power)) : ctx.lineTo(xS(p.percent), yS(p.power)));
+            ctx.stroke();
+
+            pts.forEach(p => { ctx.beginPath(); ctx.fillStyle = p.percent === opt ? '#c9a962' : '#2d8a4e'; ctx.arc(xS(p.percent), yS(p.power), p.percent === opt ? 5 : 3, 0, Math.PI * 2); ctx.fill(); });
+
+            const optPt = pts.find(p => p.percent === opt) || pts[8];
+            ctx.beginPath(); ctx.strokeStyle = '#c9a962'; ctx.lineWidth = 1.5; ctx.setLineDash([4, 4]);
+            ctx.moveTo(xS(optPt.percent), yS(optPt.power)); ctx.lineTo(xS(optPt.percent), h - pad.bottom); ctx.stroke(); ctx.setLineDash([]);
+
+            ctx.fillStyle = '#9a9a9a'; ctx.font = '10px Raleway, sans-serif'; ctx.textAlign = 'center';
+            for (let p = 20; p <= 95; p += 25) ctx.fillText(p + '%', xS(p), h - pad.bottom + 15);
+            ctx.save(); ctx.translate(12, h / 2); ctx.rotate(-Math.PI / 2); ctx.fillText('Potenza', 0, 0); ctx.restore();
+        }
+
+        function roundRect(ctx, x, y, w, h, r) {
+            ctx.beginPath(); ctx.moveTo(x + r, y); ctx.lineTo(x + w - r, y); ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+            ctx.lineTo(x + w, y + h - r); ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h); ctx.lineTo(x + r, y + h);
+            ctx.quadraticCurveTo(x, y + h, x, y + h - r); ctx.lineTo(x, y + r); ctx.quadraticCurveTo(x, y, x + r, y); ctx.closePath();
+        }
+
+        // Instagram Share - iOS compatible
+        function shareInstagram() {
+            if (!currentResult) return;
+            const canvas = document.getElementById('instagramCanvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 1080; canvas.height = 1920;
+
+            const grad = ctx.createLinearGradient(0, 0, 0, 1920);
+            grad.addColorStop(0, '#0a0a0b'); grad.addColorStop(1, '#111113');
+            ctx.fillStyle = grad; ctx.fillRect(0, 0, 1080, 1920);
+
+            ctx.strokeStyle = '#c9a962'; ctx.lineWidth = 4; ctx.strokeRect(40, 40, 1000, 1840);
+
+            ctx.fillStyle = '#c9a962'; ctx.font = '120px serif'; ctx.textAlign = 'center'; ctx.fillText('ᛗ', 540, 200);
+            ctx.font = 'bold 72px Cinzel, serif'; ctx.fillStyle = '#e8e6e3'; ctx.fillText('MJÖLNIR', 540, 320);
+            ctx.font = '32px Raleway, sans-serif'; ctx.fillStyle = '#9a9a9a'; ctx.fillText('Calcolatore Carico di Potenza', 540, 380);
+
+            ctx.font = 'bold 48px Cinzel, serif'; ctx.fillStyle = '#c9a962'; ctx.fillText(currentResult.exercise.toUpperCase(), 540, 520);
+
+            ctx.fillStyle = '#161618'; roundRect(ctx, 80, 600, 920, 280, 20); ctx.fill();
+            ctx.strokeStyle = '#c9a962'; ctx.lineWidth = 2; roundRect(ctx, 80, 600, 920, 280, 20); ctx.stroke();
+
+            ctx.font = 'bold 120px Cinzel, serif'; ctx.fillStyle = '#c9a962'; ctx.fillText(currentResult.optimalPercent + '%', 540, 740);
+            ctx.font = '36px Raleway, sans-serif'; ctx.fillStyle = '#9a9a9a'; ctx.fillText('DEL 1RM', 540, 800);
+            ctx.font = 'bold 64px Cinzel, serif'; ctx.fillStyle = '#e8e6e3'; ctx.fillText(currentResult.optimalWeight + ' KG', 540, 860);
+
+            const zn = [
+                { n: 'FORZA', kg: Math.round(currentResult.oneRM * currentResult.zones.forza.percent / 100), c: '#8b2635' },
+                { n: 'F-VEL', kg: Math.round(currentResult.oneRM * currentResult.zones.forzaVel.percent / 100), c: '#c45e20' },
+                { n: 'POTENZA', kg: Math.round(currentResult.oneRM * currentResult.zones.potenza.percent / 100), c: '#2d8a4e' },
+                { n: 'V-FORZA', kg: Math.round(currentResult.oneRM * currentResult.zones.velForza.percent / 100), c: '#2563a8' },
+                { n: 'SPEED', kg: Math.round(currentResult.oneRM * currentResult.zones.velocita.percent / 100), c: '#6b4c9a' }
+            ];
+            const zw = 180, sx = (1080 - (zw * 5 + 20 * 4)) / 2;
+            zn.forEach((z, i) => {
+                const x = sx + i * (zw + 20);
+                ctx.fillStyle = '#161618'; roundRect(ctx, x, 960, zw, 200, 12); ctx.fill();
+                ctx.strokeStyle = z.c; ctx.lineWidth = 3; roundRect(ctx, x, 960, zw, 200, 12); ctx.stroke();
+                ctx.font = 'bold 22px Raleway, sans-serif'; ctx.fillStyle = z.c; ctx.fillText(z.n, x + zw / 2, 1010);
+                ctx.font = 'bold 48px Cinzel, serif'; ctx.fillStyle = '#e8e6e3'; ctx.fillText(z.kg, x + zw / 2, 1080);
+                ctx.font = '24px Raleway, sans-serif'; ctx.fillStyle = '#666'; ctx.fillText('KG', x + zw / 2, 1120);
+            });
+
+            ctx.font = '36px Raleway, sans-serif'; ctx.fillStyle = '#666'; ctx.fillText('1RM: ' + currentResult.oneRM + ' kg', 540, 1280);
+            ctx.fillStyle = '#c9a962'; ctx.font = 'bold 36px Cinzel, serif'; ctx.fillText('NICHOLAS RUBINI', 540, 1700);
+            ctx.font = '28px Raleway, sans-serif'; ctx.fillStyle = '#666'; ctx.fillText('nicholasrubini.it', 540, 1750);
+            ctx.font = '24px Raleway, sans-serif'; ctx.fillStyle = '#9a9a9a'; ctx.fillText('Train Like a Viking', 540, 1800);
+
+            // iOS compatible download
+            canvas.toBlob(function(blob) {
+                const url = URL.createObjectURL(blob);
+                const filename = `mjolnir-${currentResult.exercise.toLowerCase().replace(/\s+/g, '-')}.png`;
+                
+                // Try native share on mobile
+                if (navigator.share && navigator.canShare && navigator.canShare({ files: [new File([blob], filename, { type: 'image/png' })] })) {
+                    navigator.share({
+                        files: [new File([blob], filename, { type: 'image/png' })],
+                        title: 'MJÖLNIR - I miei risultati',
+                    }).catch(() => {
+                        // Fallback to download
+                        downloadBlob(url, filename);
+                    });
+                } else {
+                    downloadBlob(url, filename);
+                }
+            }, 'image/png');
+        }
+
+        function downloadBlob(url, filename) {
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            setTimeout(() => URL.revokeObjectURL(url), 100);
+        }
+
+        // PDF Export - iOS compatible
+        async function downloadPDF() {
+            if (!currentResult) return;
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('p', 'mm', 'a4');
+            const pw = doc.internal.pageSize.getWidth();
+
+            doc.setFillColor(22, 22, 24); doc.rect(0, 0, pw, 297, 'F');
+
+            doc.setTextColor(201, 169, 98); doc.setFontSize(32); doc.text('MJÖLNIR', pw / 2, 25, { align: 'center' });
+            doc.setTextColor(154, 154, 154); doc.setFontSize(11); doc.text('Calcolatore Carico di Potenza', pw / 2, 33, { align: 'center' });
+
+            doc.setDrawColor(201, 169, 98); doc.setLineWidth(0.5); doc.line(20, 42, pw - 20, 42);
+
+            doc.setTextColor(201, 169, 98); doc.setFontSize(16); doc.text(currentResult.exercise, pw / 2, 55, { align: 'center' });
+
+            doc.setFillColor(16, 16, 18); doc.roundedRect(20, 65, pw - 40, 45, 5, 5, 'F');
+            doc.setDrawColor(201, 169, 98); doc.roundedRect(20, 65, pw - 40, 45, 5, 5, 'S');
+
+            doc.setTextColor(201, 169, 98); doc.setFontSize(28); doc.text(currentResult.optimalPercent + '%', pw / 2 - 25, 93, { align: 'center' });
+            doc.setTextColor(232, 230, 227); doc.setFontSize(20); doc.text(currentResult.optimalWeight + ' kg', pw / 2 + 30, 93, { align: 'center' });
+            doc.setTextColor(154, 154, 154); doc.setFontSize(9);
+            doc.text('CARICO OTTIMALE', pw / 2 - 25, 103, { align: 'center' });
+            doc.text('PESO', pw / 2 + 30, 103, { align: 'center' });
+
+            doc.setTextColor(232, 230, 227); doc.setFontSize(12); doc.text('Zone Forza-Velocità', 20, 130);
+
+            const zones = [
+                { name: 'Forza', key: 'forza', color: [139, 38, 53] },
+                { name: 'F-Vel', key: 'forzaVel', color: [196, 94, 32] },
+                { name: 'Potenza', key: 'potenza', color: [45, 138, 78] },
+                { name: 'V-Forza', key: 'velForza', color: [37, 99, 168] },
+                { name: 'Speed', key: 'velocita', color: [107, 76, 154] }
+            ];
+            const zw = (pw - 50) / 5;
+            zones.forEach((z, i) => {
+                const x = 20 + i * (zw + 2.5), zd = currentResult.zones[z.key], wt = Math.round(currentResult.oneRM * zd.percent / 100);
+                doc.setFillColor(16, 16, 18); doc.roundedRect(x, 138, zw, 40, 3, 3, 'F');
+                doc.setDrawColor(...z.color); doc.roundedRect(x, 138, zw, 40, 3, 3, 'S');
+                doc.setTextColor(...z.color); doc.setFontSize(7); doc.text(z.name.toUpperCase(), x + zw / 2, 147, { align: 'center' });
+                doc.setTextColor(232, 230, 227); doc.setFontSize(12); doc.text(wt + ' kg', x + zw / 2, 160, { align: 'center' });
+                doc.setTextColor(154, 154, 154); doc.setFontSize(7);
+                doc.text(zd.percent + '%', x + zw / 2, 170, { align: 'center' });
+            });
+
+            doc.setTextColor(232, 230, 227); doc.setFontSize(12); doc.text('Raccomandazioni', 20, 200);
+            const reps = currentResult.optimalPercent >= 60 ? '3-5' : '3-6';
+            const sets = currentResult.optimalPercent >= 60 ? '4-6' : '3-5';
+            const recs = [
+                `Carico: ${currentResult.optimalPercent}% del 1RM (${currentResult.optimalWeight} kg)`,
+                `Volume: ${sets} serie x ${reps} ripetizioni`,
+                'Focus: movimento esplosivo concentrico',
+                'Recupero: 2-3 minuti tra le serie'
+            ];
+            doc.setFontSize(9);
+            recs.forEach((r, i) => {
+                doc.setTextColor(201, 169, 98); doc.text('→', 25, 210 + i * 8);
+                doc.setTextColor(154, 154, 154); doc.text(r, 32, 210 + i * 8);
+            });
+
+            doc.setDrawColor(201, 169, 98); doc.line(20, 277, pw - 20, 277);
+            doc.setTextColor(201, 169, 98); doc.setFontSize(11); doc.text('Nicholas Rubini', pw / 2, 285, { align: 'center' });
+            doc.setTextColor(154, 154, 154); doc.setFontSize(8); doc.text('nicholasrubini.it', pw / 2, 292, { align: 'center' });
+
+            // iOS compatible save
+            const pdfBlob = doc.output('blob');
+            const url = URL.createObjectURL(pdfBlob);
+            const filename = `mjolnir-${currentResult.exercise.toLowerCase().replace(/\s+/g, '-')}.pdf`;
+            
+            // Try native share on iOS
+            if (navigator.share && /iPhone|iPad/i.test(navigator.userAgent)) {
+                try {
+                    await navigator.share({
+                        files: [new File([pdfBlob], filename, { type: 'application/pdf' })],
+                        title: 'MJÖLNIR - Risultati'
+                    });
+                } catch {
+                    downloadBlob(url, filename);
+                }
+            } else {
+                downloadBlob(url, filename);
+            }
+        }
+
+        function calculate1RM() {
+            const w = parseFloat(document.getElementById('modal-weight').value);
+            const r = parseInt(document.getElementById('modal-reps').value);
+            const f = document.getElementById('modal-formula').value;
+            if (!w || !r || r < 1 || r > 15) { alert('Valori non validi (1-15 rep)'); return; }
+            let rm;
+            if (f === 'epley') rm = w * (1 + r / 30);
+            else if (f === 'brzycki') rm = w * (36 / (37 - r));
+            else rm = w / (1.013 - 0.0267123 * r);
+            rm = Math.round(rm);
+            document.getElementById('modal-result-value').textContent = rm;
+            document.getElementById('modal-result').style.display = 'block';
+            document.getElementById('oneRM').value = rm;
+        }
+
+        function saveToHistory() {
+            if (!currentResult) return;
+            history.unshift({ ...currentResult, id: Date.now() });
+            history = history.slice(0, 20);
+            localStorage.setItem('mjolnir_history', JSON.stringify(history));
+            renderHistory();
+        }
+
+        function renderHistory() {
+            const c = document.getElementById('history-list'), e = document.getElementById('history-empty');
+            if (!history.length) { e.style.display = 'block'; c.innerHTML = ''; return; }
+            e.style.display = 'none';
+            c.innerHTML = history.map(it => {
+                const d = new Date(it.date), ds = d.toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit' }) + ' ' + d.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+                return `<div class="history-item"><div class="history-header"><span class="history-exercise">${it.exercise}</span><span class="history-date">${ds}</span></div><div class="history-stats"><div class="history-stat"><div class="history-stat-value">${it.oneRM}</div><div class="history-stat-label">1RM</div></div><div class="history-stat"><div class="history-stat-value">${it.optimalPercent}%</div><div class="history-stat-label">Carico</div></div><div class="history-stat"><div class="history-stat-value">${it.optimalWeight}</div><div class="history-stat-label">Peso</div></div></div><div class="history-actions"><button class="btn-ghost" onclick="loadFromHistory(${it.id})">Carica</button><button class="btn-ghost danger" onclick="deleteFromHistory(${it.id})">Elimina</button></div></div>`;
+            }).join('');
+        }
+
+        function loadFromHistory(id) {
+            const it = history.find(h => h.id === id);
+            if (!it) return;
+            document.getElementById('exercise').value = it.exerciseKey;
+            document.getElementById('oneRM').value = it.oneRM;
+            document.getElementById('goal').value = it.goal || 'power';
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelector('[data-tab="calculator"]').classList.add('active');
+            document.getElementById('calculator').classList.add('active');
+            updateStickyCta();
+        }
+
+        function deleteFromHistory(id) {
+            history = history.filter(h => h.id !== id);
+            localStorage.setItem('mjolnir_history', JSON.stringify(history));
+            renderHistory();
+        }
+
+        // Init
+        renderHistory();
+        window.addEventListener('resize', () => { 
+            if (currentResult) drawPowerChart(); 
+            updateStickyCta();
+        });
+    </script>
+</body>
+</html>
