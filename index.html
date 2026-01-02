@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no, maximum-scale=1.0">
+    
+    <title>MJÖLNIR - Calcola Potenza</title>
+    <meta name="description" content="Calcola il carico ottimale per massimizzare la potenza. Tool gratuito.">
+    <meta name="author" content="Nicholas Rubini">
+    
+    <!-- PWA Essential -->
+    <meta name="theme-color" content="#0a0a0c">
+    <meta name="background-color" content="#0a0a0c">
+    
+    <!-- iOS PWA -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="MJÖLNIR">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    
+    <!-- iOS Icons -->
+    <link rel="apple-touch-icon" href="data:image/png;base64,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">
+    
+    <!-- iOS Splash Screens -->
+    <link rel="apple-touch-startup-image" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==" media="(device-width: 375px)">
+    
+    <!-- Manifest inline -->
+    <link rel="manifest" href="data:application/manifest+json;base64,ewogICJuYW1lIjogIk1Kw5ZMTklSIC0gQ2FsY29sYXRvcmUgUG90ZW56YSIsCiAgInNob3J0X25hbWUiOiAiTUpPTE5JUiIsCiAgImRlc2NyaXB0aW9uIjogIkNhbGNvbGEgaWwgY2FyaWNvIG90dGltYWxlIHBlciBsYSBwb3RlbnphIiwKICAic3RhcnRfdXJsIjogIi4iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJvcmllbnRhdGlvbiI6ICJwb3J0cmFpdCIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzBhMGEwYiIsCiAgInRoZW1lX2NvbG9yIjogIiNjOWE5NjIiLAogICJpY29ucyI6IFsKICAgIHsKICAgICAgInNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWwsJTNDc3ZnIHZpZXdCb3g9JzAgMCAxMDAgMTAwJyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnJTNFJTNDcmVjdCB3aWR0aD0nMTAwJyBoZWlnaHQ9JzEwMCcgZmlsbD0nJTIzMGEwYTBiJy8lM0UlM0N0ZXh0IHg9JzUwJyB5PSc2NScgZm9udC1zaXplPSc0MCcgZmlsbD0nJTIzYzlhOTYyJyB0ZXh0LWFuY2hvcj0nbWlkZGxlJyUzReGblyUzQy90ZXh0JTNFJTNDL3N2ZyUzRSIsCiAgICAgICJzaXplcyI6ICIxOTJ4MTkyIiwKICAgICAgInR5cGUiOiAiaW1hZ2Uvc3ZnK3htbCIsCiAgICAgICJwdXJwb3NlIjogImFueSBtYXNrYWJsZSIKICAgIH0KICBdCn0=">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- jsPDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <style>
+        :root {
+            /* Norse Brand Palette */
+            --bg: #0a0a0c;
+            --bg2: #111114;
+            --bg3: #18181c;
+            --bg-input: #1e1e24;
+            --border: #2a2a2f;
+            --gold: #c9a227;
+            --gold-dark: #a68a1f;
+            --gold-glow: rgba(201, 162, 39, 0.15);
+            --ice: #7FB3D5;
+            --text: #f0ede6;
+            --text2: #a0a0a0;
+            --text3: #666;
+            /* Zone Colors */
+            --z-forza: #8b2635;
+            --z-fvel: #c45e20;
+            --z-pot: #2d8a4e;
+            --z-vfor: #2563a8;
+            --z-vel: #6b4c9a;
+            /* Safe Areas */
+            --safe-t: env(safe-area-inset-top, 0px);
+            --safe-b: env(safe-area-inset-bottom, 0px);
+            --safe-l: env(safe-area-inset-left, 0px);
+            --safe-r: env(safe-area-inset-right, 0px);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+
+        html {
+            font-size: 16px;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            min-height: 100dvh;
+            padding-bottom: calc(72px + var(--safe-b));
+            overscroll-behavior: none;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: calc(1rem + var(--safe-t)) 1rem 1rem;
+            background: var(--bg2);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .logo {
+            font-size: 1.75rem;
+            color: var(--gold);
+            text-shadow: 0 0 20px rgba(201,169,98,0.4);
+        }
+
+        .header h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            margin: 0.15rem 0;
+        }
+
+        .header h1 span { color: var(--gold); }
+
+        .subtitle {
+            font-size: 0.7rem;
+            color: var(--text2);
+            letter-spacing: 0.02em;
+        }
+
+        /* Main */
+        main {
+            padding: 1rem;
+            padding-left: calc(1rem + var(--safe-l));
+            padding-right: calc(1rem + var(--safe-r));
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Card */
+        .card {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            background: var(--bg3);
+            padding: 0.25rem;
+            margin: 0.75rem;
+            border-radius: 10px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 0.625rem 0.5rem;
+            background: none;
+            border: none;
+            border-radius: 8px;
+            color: var(--text2);
+            font-family: inherit;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-height: 44px;
+        }
+
+        .tab.active {
+            background: var(--bg);
+            color: var(--gold);
+        }
+
+        .tab:active { opacity: 0.8; }
+
+        .panel {
+            display: none;
+            padding: 0 1rem 1rem;
+        }
+
+        .panel.active { display: block; }
+
+        /* Form */
+        .field {
+            margin-bottom: 1rem;
+        }
+
+        .label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--text2);
+            margin-bottom: 0.4rem;
+        }
+
+        .input, .select {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 16px;
+            min-height: 50px;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .input:focus, .select:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+
+        .input::placeholder { color: var(--text3); }
+
+        .select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath fill='%239a9a9a' d='M5 6L0 0h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            padding-right: 2.5rem;
+        }
+
+        .row {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .row .field { flex: 1; }
+
+        .input-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .input-group .input { flex: 1; }
+
+        .btn-icon {
+            width: 50px;
+            min-width: 50px;
+            height: 50px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text2);
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-icon:active {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        .btn-main {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            border: none;
+            border-radius: 12px;
+            color: var(--bg);
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            cursor: pointer;
+            min-height: 54px;
+            margin-top: 0.5rem;
+        }
+
+        .btn-main:active {
+            transform: scale(0.98);
+            filter: brightness(0.95);
+        }
+
+        /* Results */
+        .results-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .result-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .result-card.gold {
+            border-color: var(--gold);
+            background: linear-gradient(135deg, rgba(201,169,98,0.15), rgba(201,169,98,0.05));
+        }
+
+        .result-val {
+            font-family: 'Cinzel', serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            line-height: 1.1;
+        }
+
+        .result-card.gold .result-val { color: var(--gold); }
+
+        .result-lbl {
+            font-size: 0.65rem;
+            color: var(--text2);
+            margin-top: 0.2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        /* Actions */
+        .actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .btn-action {
+            flex: 1;
+            padding: 0.75rem 0.5rem;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text2);
+            font-family: inherit;
+            font-size: 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.35rem;
+            min-height: 44px;
+        }
+
+        .btn-action:active {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        .btn-action.ig {
+            background: linear-gradient(135deg, #833AB4, #FD1D1D, #F77737);
+            border: none;
+            color: #fff;
+        }
+
+        .btn-action.ig:active {
+            filter: brightness(0.9);
+            color: #fff;
+        }
+
+        /* Zones */
+        .section-head {
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-head::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .zones {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.35rem;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 380px) {
+            .zones { grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+        }
+
+        .zone {
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            padding: 0.6rem 0.25rem;
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .zone:active { transform: scale(0.97); }
+
+        .zone[data-z="f"] { border-color: var(--z-forza); }
+        .zone[data-z="fv"] { border-color: var(--z-fvel); }
+        .zone[data-z="p"] { border-color: var(--z-pot); }
+        .zone[data-z="vf"] { border-color: var(--z-vfor); }
+        .zone[data-z="v"] { border-color: var(--z-vel); }
+
+        .zone.active { border-width: 3px; box-shadow: 0 0 12px rgba(45,138,78,0.4); }
+
+        .zone-name {
+            font-size: 0.55rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            margin-bottom: 0.2rem;
+        }
+
+        .zone[data-z="f"] .zone-name { color: var(--z-forza); }
+        .zone[data-z="fv"] .zone-name { color: var(--z-fvel); }
+        .zone[data-z="p"] .zone-name { color: var(--z-pot); }
+        .zone[data-z="vf"] .zone-name { color: var(--z-vfor); }
+        .zone[data-z="v"] .zone-name { color: var(--z-vel); }
+
+        .zone-kg {
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .zone-pct {
+            font-size: 0.55rem;
+            color: var(--text2);
+        }
+
+        .zone-vel {
+            font-size: 0.5rem;
+            color: var(--text3);
+            margin-top: 0.15rem;
+        }
+
+        .zones-tip {
+            font-size: 0.65rem;
+            color: var(--text3);
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        /* Chart */
+        .chart-wrap {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        #chart {
+            width: 100%;
+            height: 140px;
+            display: block;
+        }
+
+        /* Recs */
+        .recs {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .rec {
+            display: flex;
+            gap: 0.5rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.8rem;
+            color: var(--text2);
+        }
+
+        .rec:last-child { border: none; padding-bottom: 0; }
+        .rec:first-child { padding-top: 0; }
+
+        .rec-icon { color: var(--gold); }
+        .rec strong { color: var(--text); }
+
+        /* CTA Desktop */
+        .cta-desktop {
+            display: none;
+            background: linear-gradient(135deg, rgba(201,169,98,0.2), rgba(201,169,98,0.08));
+            border: 2px solid var(--gold);
+            border-radius: 14px;
+            padding: 1.25rem;
+            text-align: center;
+        }
+
+        @media (min-width: 768px) {
+            .cta-desktop { display: block; }
+            .cta-sticky { display: none !important; }
+            body { padding-bottom: 0; }
+        }
+
+        .cta-desktop-icon { font-size: 1.75rem; margin-bottom: 0.4rem; }
+
+        .cta-desktop-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gold);
+            margin-bottom: 0.4rem;
+        }
+
+        .cta-desktop-text {
+            font-size: 0.85rem;
+            color: var(--text2);
+            margin-bottom: 0.875rem;
+        }
+
+        .cta-desktop-btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            border-radius: 10px;
+            color: var(--bg);
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        /* CTA Sticky Mobile */
+        .cta-sticky {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, var(--bg) 80%, transparent);
+            padding: 0.75rem 1rem;
+            padding-bottom: calc(0.75rem + var(--safe-b));
+            z-index: 100;
+            display: none;
+        }
+
+        .cta-sticky.show { display: block; }
+
+        .cta-sticky a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            width: 100%;
+            padding: 0.875rem 1rem;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            border-radius: 14px;
+            color: var(--bg);
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            text-decoration: none;
+            min-height: 52px;
+            box-shadow: 0 -2px 20px rgba(0,0,0,0.4), 0 4px 15px rgba(201,169,98,0.35);
+            animation: glow 2s infinite;
+        }
+
+        @keyframes glow {
+            0%,100% { box-shadow: 0 -2px 20px rgba(0,0,0,0.4), 0 4px 15px rgba(201,169,98,0.35); }
+            50% { box-shadow: 0 -2px 20px rgba(0,0,0,0.4), 0 4px 25px rgba(201,169,98,0.5); }
+        }
+
+        .cta-sticky a:active { transform: scale(0.98); animation: none; }
+
+        /* History */
+        .empty {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: var(--text3);
+        }
+
+        .empty-icon { font-size: 1.75rem; margin-bottom: 0.5rem; opacity: 0.5; }
+
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .history-item {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 0.875rem;
+        }
+
+        .history-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.6rem;
+        }
+
+        .history-ex {
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .history-date {
+            font-size: 0.65rem;
+            color: var(--text3);
+        }
+
+        .history-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.4rem;
+            text-align: center;
+        }
+
+        .history-stat-val {
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--gold);
+        }
+
+        .history-stat-lbl {
+            font-size: 0.55rem;
+            color: var(--text3);
+        }
+
+        .history-btns {
+            display: flex;
+            gap: 0.4rem;
+            margin-top: 0.6rem;
+            padding-top: 0.6rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .btn-sm {
+            flex: 1;
+            padding: 0.5rem;
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text2);
+            font-family: inherit;
+            font-size: 0.75rem;
+            cursor: pointer;
+            min-height: 40px;
+        }
+
+        .btn-sm:active { border-color: var(--gold); color: var(--gold); }
+        .btn-sm.del:active { border-color: var(--z-forza); color: var(--z-forza); }
+
+        /* Modal */
+        .modal-bg {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.92);
+            z-index: 200;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.25s;
+        }
+
+        .modal-bg.open { opacity: 1; visibility: visible; }
+
+        .modal {
+            background: var(--bg2);
+            border-radius: 20px 20px 0 0;
+            width: 100%;
+            max-width: 420px;
+            max-height: 85vh;
+            overflow-y: auto;
+            transform: translateY(100%);
+            transition: transform 0.3s;
+            padding-bottom: var(--safe-b);
+        }
+
+        .modal-bg.open .modal { transform: translateY(0); }
+
+        .modal-bar {
+            width: 32px;
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            margin: 0.6rem auto;
+        }
+
+        .modal-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1rem 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-title {
+            font-family: 'Cinzel', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            width: 44px;
+            height: 44px;
+            background: none;
+            border: none;
+            color: var(--text3);
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-body { padding: 1rem; }
+
+        .modal-res {
+            text-align: center;
+            padding: 0.875rem;
+            background: var(--bg);
+            border-radius: 10px;
+            margin-top: 0.875rem;
+            display: none;
+        }
+
+        .modal-res.show { display: block; }
+
+        .modal-res-val {
+            font-family: 'Cinzel', serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        .modal-res-lbl {
+            font-size: 0.8rem;
+            color: var(--text2);
+        }
+
+        /* Zone Modal */
+        .zi-head {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.875rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .zi-badge {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .zi-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .zi-sub {
+            font-size: 0.75rem;
+            color: var(--text2);
+        }
+
+        .zi-sec {
+            margin-bottom: 0.875rem;
+        }
+
+        .zi-sec-title {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 0.3rem;
+        }
+
+        .zi-sec-text {
+            font-size: 0.8rem;
+            color: var(--text2);
+            line-height: 1.5;
+        }
+
+        .zi-list {
+            list-style: none;
+        }
+
+        .zi-list li {
+            font-size: 0.8rem;
+            color: var(--text2);
+            padding: 0.15rem 0 0.15rem 1rem;
+            position: relative;
+        }
+
+        .zi-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--gold);
+        }
+
+        /* PWA Banner */
+        .pwa-banner {
+            display: none;
+            background: var(--gold);
+            padding: 0.6rem 1rem;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .pwa-banner span {
+            color: var(--bg);
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 1rem;
+            border-top: 1px solid var(--border);
+            margin-top: 0.5rem;
+        }
+
+        footer a {
+            color: var(--gold);
+            text-decoration: none;
+            font-size: 0.7rem;
+        }
+
+        /* Hidden */
+        .hidden { position: absolute; left: -9999px; }
+    </style>
+</head>
+<body>
+    <div class="pwa-banner" id="pwaBanner" onclick="installPWA()">
+        <span>📲 Installa l'app per accesso rapido</span>
+    </div>
+
+    <header class="header">
+        <div class="logo">ᛗ</div>
+        <h1><span>MJÖLNIR</span></h1>
+        <p class="subtitle">Calcolatore Potenza</p>
+    </header>
+
+    <main>
+        <div class="card">
+            <div class="tabs">
+                <button class="tab active" data-t="calc">Calcola</button>
+                <button class="tab" data-t="res">Risultati</button>
+                <button class="tab" data-t="hist">Storico</button>
+            </div>
+
+            <!-- Calc Panel -->
+            <div class="panel active" id="calc">
+                <div class="field">
+                    <label class="label">Esercizio</label>
+                    <select id="ex" class="select">
+                        <option value="squat">Squat</option>
+                        <option value="bench" selected>Panca Piana</option>
+                        <option value="dead">Stacco</option>
+                        <option value="ohp">Military Press</option>
+                        <option value="row">Rematore</option>
+                        <option value="clean">Girata</option>
+                        <option value="snatch">Strappo</option>
+                        <option value="jsq">Jump Squat</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label class="label">1RM (kg)</label>
+                    <div class="input-group">
+                        <input type="number" id="rm" class="input" placeholder="Es. 100" inputmode="decimal">
+                        <button class="btn-icon" onclick="openM('rmModal')">⚖️</button>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Obiettivo</label>
+                    <select id="goal" class="select">
+                        <option value="p">Max Potenza</option>
+                        <option value="fv">Forza-Velocità</option>
+                        <option value="vf">Velocità-Forza</option>
+                    </select>
+                </div>
+
+                <button class="btn-main" onclick="calc()">CALCOLA</button>
+            </div>
+
+            <!-- Results Panel -->
+            <div class="panel" id="res">
+                <div id="resEmpty" class="empty">
+                    <div class="empty-icon">⚡</div>
+                    <p>Calcola il tuo carico</p>
+                </div>
+
+                <div id="resContent" style="display:none">
+                    <div class="results-grid">
+                        <div class="result-card gold">
+                            <div class="result-val" id="resPct">-</div>
+                            <div class="result-lbl">del 1RM</div>
+                        </div>
+                        <div class="result-card">
+                            <div class="result-val" id="resKg">-</div>
+                            <div class="result-lbl">Peso Ottimale</div>
+                        </div>
+                    </div>
+
+                    <div class="actions">
+                        <button class="btn-action ig" onclick="shareIG()">📸 Share</button>
+                        <button class="btn-action" onclick="getPDF()">📄 PDF</button>
+                    </div>
+
+                    <div class="section-head">Zone Forza-Velocità</div>
+                    <div class="zones" id="zones"></div>
+                    <p class="zones-tip">💡 Tocca per info</p>
+
+                    <div class="chart-wrap">
+                        <div class="section-head" style="margin-bottom:0.5rem">Curva Potenza</div>
+                        <canvas id="chart"></canvas>
+                    </div>
+
+                    <div class="recs" id="recs"></div>
+
+                    <div class="cta-desktop">
+                        <div class="cta-desktop-icon">⚔️</div>
+                        <div class="cta-desktop-title">Vuoi Migliorare?</div>
+                        <p class="cta-desktop-text">Scopri quale scheda è perfetta per te.</p>
+                        <a href="https://scheda.nicholasrubini.it/" target="_blank" class="cta-desktop-btn">TROVA LA TUA SCHEDA</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- History Panel -->
+            <div class="panel" id="hist">
+                <div id="histEmpty" class="empty">
+                    <div class="empty-icon">📜</div>
+                    <p>Nessun calcolo</p>
+                </div>
+                <div id="histList" class="history-list"></div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <a href="https://nicholasrubini.it" target="_blank">Nicholas Rubini</a> — Train Like a Viking
+    </footer>
+
+    <!-- Sticky CTA -->
+    <div class="cta-sticky" id="ctaSticky">
+        <a href="https://scheda.nicholasrubini.it/" target="_blank">
+            ⚔️ TROVA LA TUA SCHEDA
+        </a>
+    </div>
+
+    <!-- 1RM Modal -->
+    <div class="modal-bg" id="rmModal">
+        <div class="modal">
+            <div class="modal-bar"></div>
+            <div class="modal-head">
+                <span class="modal-title">Calcola 1RM</span>
+                <button class="modal-close" onclick="closeM('rmModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="field">
+                    <label class="label">Peso Sollevato (kg)</label>
+                    <input type="number" id="mW" class="input" placeholder="Es. 80" inputmode="decimal">
+                </div>
+                <div class="field">
+                    <label class="label">Ripetizioni</label>
+                    <input type="number" id="mR" class="input" placeholder="Es. 5" inputmode="numeric" min="1" max="15">
+                </div>
+                <div class="field">
+                    <label class="label">Formula</label>
+                    <select id="mF" class="select">
+                        <option value="e">Epley</option>
+                        <option value="b">Brzycki</option>
+                        <option value="l">Lander</option>
+                    </select>
+                </div>
+                <button class="btn-main" onclick="calc1RM()">CALCOLA</button>
+                <div class="modal-res" id="mRes">
+                    <div class="modal-res-val" id="mResVal">-</div>
+                    <div class="modal-res-lbl">1RM Stimato</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Zone Modal -->
+    <div class="modal-bg" id="zModal">
+        <div class="modal">
+            <div class="modal-bar"></div>
+            <div class="modal-head">
+                <span class="modal-title">Zona</span>
+                <button class="modal-close" onclick="closeM('zModal')">×</button>
+            </div>
+            <div class="modal-body" id="zContent"></div>
+        </div>
+    </div>
+
+    <canvas id="igCanvas" class="hidden" width="1080" height="1920"></canvas>
+
+    <script>
+        const EX = {
+            squat: { n: 'Squat', opt: 55, z: { f: { p: 90, v: '0.15-0.35' }, fv: { p: 80, v: '0.35-0.5' }, p: { p: 55, v: '0.5-0.75' }, vf: { p: 40, v: '0.75-1.0' }, v: { p: 25, v: '1.0+' } } },
+            bench: { n: 'Panca', opt: 50, z: { f: { p: 90, v: '0.15-0.35' }, fv: { p: 80, v: '0.35-0.5' }, p: { p: 50, v: '0.5-0.75' }, vf: { p: 35, v: '0.75-1.0' }, v: { p: 20, v: '1.0+' } } },
+            dead: { n: 'Stacco', opt: 60, z: { f: { p: 90, v: '0.15-0.35' }, fv: { p: 80, v: '0.35-0.5' }, p: { p: 60, v: '0.5-0.75' }, vf: { p: 45, v: '0.75-1.0' }, v: { p: 30, v: '1.0+' } } },
+            ohp: { n: 'Military', opt: 45, z: { f: { p: 90, v: '0.15-0.35' }, fv: { p: 75, v: '0.35-0.5' }, p: { p: 45, v: '0.5-0.75' }, vf: { p: 30, v: '0.75-1.0' }, v: { p: 20, v: '1.0+' } } },
+            row: { n: 'Rematore', opt: 55, z: { f: { p: 90, v: '0.15-0.35' }, fv: { p: 80, v: '0.35-0.5' }, p: { p: 55, v: '0.5-0.75' }, vf: { p: 40, v: '0.75-1.0' }, v: { p: 25, v: '1.0+' } } },
+            clean: { n: 'Girata', opt: 70, z: { f: { p: 95, v: '0.1-0.3' }, fv: { p: 85, v: '0.3-0.5' }, p: { p: 70, v: '0.5-0.8' }, vf: { p: 55, v: '0.8-1.1' }, v: { p: 40, v: '1.1+' } } },
+            snatch: { n: 'Strappo', opt: 65, z: { f: { p: 95, v: '0.1-0.3' }, fv: { p: 85, v: '0.3-0.5' }, p: { p: 65, v: '0.5-0.9' }, vf: { p: 50, v: '0.9-1.2' }, v: { p: 35, v: '1.2+' } } },
+            jsq: { n: 'Jump Squat', opt: 30, z: { f: { p: 70, v: '0.3-0.5' }, fv: { p: 55, v: '0.5-0.7' }, p: { p: 30, v: '0.7-1.0' }, vf: { p: 15, v: '1.0-1.3' }, v: { p: 0, v: '1.3+' } } }
+        };
+
+        const ZI = {
+            f: { n: 'Forza Max', c: '#8b2635', i: '🏋️', d: 'Massima tensione muscolare.', b: ['Forza assoluta', 'Reclutamento fibre', 'Base per tutto'], t: '85-95% 1RM, 1-5 rep, 3-5 min rec.', fr: '1-2x/sett' },
+            fv: { n: 'Forza-Velocità', c: '#c45e20', i: '💪', d: 'Forza dominante + velocità.', b: ['Potenza forza-based', 'Transfert esplosivo', 'Ipertrofia funzionale'], t: '70-85% 1RM, 3-5 rep esplosive.', fr: '1-2x/sett' },
+            p: { n: 'Potenza Max', c: '#2d8a4e', i: '⚡', d: 'Punto ottimale F×V.', b: ['Max potenza', 'Esplosività', 'RFD'], t: '40-60% 1RM, 3-6 rep max vel.', fr: '2-3x/sett' },
+            vf: { n: 'Vel-Forza', c: '#2563a8', i: '🚀', d: 'Velocità + carico moderato.', b: ['Velocità sotto carico', 'Rapidità', 'Reattività'], t: '30-50% 1RM, 4-8 rep.', fr: '2-3x/sett' },
+            v: { n: 'Velocità', c: '#6b4c9a', i: '💨', d: 'Max velocità, carichi minimi.', b: ['Velocità max', 'Sistema nervoso', 'Balistico'], t: '0-30% 1RM, salti, lanci.', fr: '2-4x/sett' }
+        };
+
+        let cur = null, hist = JSON.parse(localStorage.getItem('mj_h') || '[]'), deferP = null;
+
+        // PWA
+        window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferP = e; document.getElementById('pwaBanner').style.display = 'block'; });
+        function installPWA() { if (deferP) { deferP.prompt(); deferP.userChoice.then(() => { document.getElementById('pwaBanner').style.display = 'none'; deferP = null; }); } }
+
+        // Tabs
+        document.querySelectorAll('.tab').forEach(t => {
+            t.onclick = () => {
+                document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+                document.querySelectorAll('.panel').forEach(x => x.classList.remove('active'));
+                t.classList.add('active');
+                document.getElementById(t.dataset.t).classList.add('active');
+                updCta();
+            };
+        });
+
+        function updCta() {
+            const s = document.getElementById('ctaSticky');
+            const isRes = document.getElementById('res').classList.contains('active');
+            s.classList.toggle('show', cur && isRes && window.innerWidth < 768);
+        }
+
+        // Modal
+        function openM(id) { document.getElementById(id).classList.add('open'); document.body.style.overflow = 'hidden'; }
+        function closeM(id) { document.getElementById(id).classList.remove('open'); document.body.style.overflow = ''; }
+        document.querySelectorAll('.modal-bg').forEach(m => { m.onclick = e => { if (e.target === m) { m.classList.remove('open'); document.body.style.overflow = ''; } }; });
+
+        // Calc
+        function calc() {
+            const ex = document.getElementById('ex').value;
+            const rm = parseFloat(document.getElementById('rm').value);
+            const goal = document.getElementById('goal').value;
+            if (!rm || rm <= 0) { alert('Inserisci 1RM valido'); return; }
+
+            const d = EX[ex];
+            let opt = d.opt;
+            if (goal === 'fv') opt = Math.min(opt + 15, 85);
+            else if (goal === 'vf') opt = Math.max(opt - 15, 20);
+
+            cur = { n: d.n, ex, rm, opt, kg: Math.round(rm * opt / 100), z: d.z, goal, t: Date.now() };
+            render();
+            save();
+
+            document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+            document.querySelectorAll('.panel').forEach(x => x.classList.remove('active'));
+            document.querySelector('[data-t="res"]').classList.add('active');
+            document.getElementById('res').classList.add('active');
+            updCta();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function render() {
+            document.getElementById('resEmpty').style.display = 'none';
+            document.getElementById('resContent').style.display = 'block';
+
+            document.getElementById('resPct').textContent = cur.opt + '%';
+            document.getElementById('resKg').textContent = cur.kg + ' kg';
+
+            const zn = ['f', 'fv', 'p', 'vf', 'v'], zl = ['Forza', 'F-Vel', 'Pot', 'V-For', 'Speed'];
+            document.getElementById('zones').innerHTML = zn.map((k, i) => {
+                const zd = cur.z[k];
+                return `<div class="zone${k === 'p' ? ' active' : ''}" data-z="${k}" onclick="showZ('${k}')">
+                    <div class="zone-name">${zl[i]}</div>
+                    <div class="zone-kg">${Math.round(cur.rm * zd.p / 100)}</div>
+                    <div class="zone-pct">${zd.p}%</div>
+                    <div class="zone-vel">${zd.v}</div>
+                </div>`;
+            }).join('');
+
+            const reps = cur.opt >= 60 ? '3-5' : '3-6', sets = cur.opt >= 60 ? '4-6' : '3-5';
+            document.getElementById('recs').innerHTML = `
+                <div class="section-head" style="margin-bottom:0.4rem">Raccomandazioni</div>
+                <div class="rec"><span class="rec-icon">⚡</span><span>Carico: <strong>${cur.opt}% (${cur.kg} kg)</strong></span></div>
+                <div class="rec"><span class="rec-icon">📊</span><span>Volume: <strong>${sets} x ${reps}</strong></span></div>
+                <div class="rec"><span class="rec-icon">🚀</span><span>Focus: <strong>esplosivo</strong></span></div>
+                <div class="rec"><span class="rec-icon">⏱️</span><span>Recupero: <strong>2-3 min</strong></span></div>
+            `;
+
+            setTimeout(drawChart, 50);
+        }
+
+        function showZ(k) {
+            const z = ZI[k], zd = cur?.z[k];
+            document.getElementById('zContent').innerHTML = `
+                <div class="zi-head">
+                    <div class="zi-badge" style="background:${z.c}22;color:${z.c}">${z.i}</div>
+                    <div><div class="zi-title" style="color:${z.c}">${z.n}</div>${zd ? `<div class="zi-sub">${Math.round(cur.rm * zd.p / 100)} kg</div>` : ''}</div>
+                </div>
+                <div class="zi-sec"><div class="zi-sec-title">Cos'è</div><p class="zi-sec-text">${z.d}</p></div>
+                <div class="zi-sec"><div class="zi-sec-title">Benefici</div><ul class="zi-list">${z.b.map(x => `<li>${x}</li>`).join('')}</ul></div>
+                <div class="zi-sec"><div class="zi-sec-title">Allenamento</div><p class="zi-sec-text">${z.t}</p></div>
+                <div class="zi-sec"><div class="zi-sec-title">Frequenza</div><p class="zi-sec-text">${z.fr}</p></div>
+            `;
+            openM('zModal');
+        }
+
+        function drawChart() {
+            const c = document.getElementById('chart'), ctx = c.getContext('2d'), wrap = c.parentElement;
+            let w = wrap.clientWidth - 24; if (w < 100) w = 280;
+            const h = 140, dpr = window.devicePixelRatio || 1;
+            c.width = w * dpr; c.height = h * dpr;
+            c.style.width = w + 'px'; c.style.height = h + 'px';
+            ctx.scale(dpr, dpr);
+
+            const pad = { t: 12, r: 12, b: 28, l: 32 };
+            ctx.clearRect(0, 0, w, h);
+
+            const opt = cur.opt, pts = [];
+            for (let p = 20; p <= 95; p += 5) pts.push({ x: p, y: Math.max(100 - Math.pow((p - opt) / 2.5, 2) * 0.15, 10) });
+
+            const xS = p => pad.l + (p - 20) / 75 * (w - pad.l - pad.r);
+            const yS = v => h - pad.b - (v / 100) * (h - pad.t - pad.b);
+
+            ctx.strokeStyle = '#2a2a2f'; ctx.lineWidth = 0.5;
+            for (let y = 25; y <= 100; y += 25) { ctx.beginPath(); ctx.moveTo(pad.l, yS(y)); ctx.lineTo(w - pad.r, yS(y)); ctx.stroke(); }
+
+            ctx.beginPath(); ctx.strokeStyle = '#2d8a4e'; ctx.lineWidth = 2;
+            pts.forEach((p, i) => i === 0 ? ctx.moveTo(xS(p.x), yS(p.y)) : ctx.lineTo(xS(p.x), yS(p.y)));
+            ctx.stroke();
+
+            pts.forEach(p => { ctx.beginPath(); ctx.fillStyle = p.x === opt ? '#c9a227' : '#2d8a4e'; ctx.arc(xS(p.x), yS(p.y), p.x === opt ? 5 : 2.5, 0, Math.PI * 2); ctx.fill(); });
+
+            const oP = pts.find(p => p.x === opt) || pts[7];
+            ctx.beginPath(); ctx.strokeStyle = '#c9a227'; ctx.lineWidth = 1.5; ctx.setLineDash([4, 3]);
+            ctx.moveTo(xS(oP.x), yS(oP.y)); ctx.lineTo(xS(oP.x), h - pad.b); ctx.stroke(); ctx.setLineDash([]);
+
+            ctx.fillStyle = '#666'; ctx.font = '9px Inter, sans-serif'; ctx.textAlign = 'center';
+            [20, 45, 70, 95].forEach(p => ctx.fillText(p + '%', xS(p), h - pad.b + 12));
+        }
+
+        // Share
+        function shareIG() {
+            if (!cur) return;
+            const c = document.getElementById('igCanvas'), ctx = c.getContext('2d');
+            c.width = 1080; c.height = 1920;
+
+            const gr = ctx.createLinearGradient(0, 0, 0, 1920);
+            gr.addColorStop(0, '#0a0a0c'); gr.addColorStop(1, '#111114');
+            ctx.fillStyle = gr; ctx.fillRect(0, 0, 1080, 1920);
+
+            ctx.strokeStyle = '#c9a227'; ctx.lineWidth = 4; ctx.strokeRect(40, 40, 1000, 1840);
+
+            ctx.fillStyle = '#c9a227'; ctx.font = '120px serif'; ctx.textAlign = 'center'; ctx.fillText('ᛗ', 540, 200);
+            ctx.font = 'bold 72px Cinzel, serif'; ctx.fillStyle = '#f0ede6'; ctx.fillText('MJÖLNIR', 540, 320);
+            ctx.font = '32px Inter, sans-serif'; ctx.fillStyle = '#a0a0a0'; ctx.fillText('Calcolatore Potenza', 540, 375);
+
+            ctx.font = 'bold 48px Cinzel, serif'; ctx.fillStyle = '#c9a227'; ctx.fillText(cur.n.toUpperCase(), 540, 500);
+
+            rr(ctx, 80, 560, 920, 260, 20); ctx.fillStyle = '#111114'; ctx.fill();
+            ctx.strokeStyle = '#c9a227'; ctx.lineWidth = 2; rr(ctx, 80, 560, 920, 260, 20); ctx.stroke();
+
+            ctx.font = 'bold 110px Cinzel, serif'; ctx.fillStyle = '#c9a227'; ctx.fillText(cur.opt + '%', 540, 700);
+            ctx.font = '34px Inter, sans-serif'; ctx.fillStyle = '#a0a0a0'; ctx.fillText('DEL 1RM', 540, 755);
+            ctx.font = 'bold 60px Cinzel, serif'; ctx.fillStyle = '#f0ede6'; ctx.fillText(cur.kg + ' KG', 540, 815);
+
+            const zn = [
+                { l: 'FORZA', k: 'f', c: '#8b2635' },
+                { l: 'F-VEL', k: 'fv', c: '#c45e20' },
+                { l: 'POT', k: 'p', c: '#2d8a4e' },
+                { l: 'V-FOR', k: 'vf', c: '#2563a8' },
+                { l: 'SPEED', k: 'v', c: '#6b4c9a' }
+            ];
+            const zw = 180, sx = (1080 - zw * 5 - 20 * 4) / 2;
+            zn.forEach((z, i) => {
+                const x = sx + i * (zw + 20), kg = Math.round(cur.rm * cur.z[z.k].p / 100);
+                rr(ctx, x, 900, zw, 180, 12); ctx.fillStyle = '#111114'; ctx.fill();
+                ctx.strokeStyle = z.c; ctx.lineWidth = 3; rr(ctx, x, 900, zw, 180, 12); ctx.stroke();
+                ctx.font = 'bold 22px Inter, sans-serif'; ctx.fillStyle = z.c; ctx.textAlign = 'center'; ctx.fillText(z.l, x + zw / 2, 950);
+                ctx.font = 'bold 46px Cinzel, serif'; ctx.fillStyle = '#f0ede6'; ctx.fillText(kg, x + zw / 2, 1015);
+                ctx.font = '22px Inter, sans-serif'; ctx.fillStyle = '#666'; ctx.fillText('KG', x + zw / 2, 1055);
+            });
+
+            ctx.font = '34px Inter, sans-serif'; ctx.fillStyle = '#666'; ctx.fillText('1RM: ' + cur.rm + ' kg', 540, 1180);
+
+            ctx.fillStyle = '#c9a227'; ctx.font = 'bold 36px Cinzel, serif'; ctx.fillText('NICHOLAS RUBINI', 540, 1680);
+            ctx.font = '28px Inter, sans-serif'; ctx.fillStyle = '#666'; ctx.fillText('nicholasrubini.it', 540, 1730);
+            ctx.font = '24px Inter, sans-serif'; ctx.fillStyle = '#a0a0a0'; ctx.fillText('Train Like a Viking', 540, 1780);
+
+            c.toBlob(blob => {
+                const fn = `mjolnir-${cur.n.toLowerCase()}.png`;
+                if (navigator.share && navigator.canShare?.({ files: [new File([blob], fn, { type: 'image/png' })] })) {
+                    navigator.share({ files: [new File([blob], fn, { type: 'image/png' })], title: 'MJÖLNIR' }).catch(() => dl(blob, fn));
+                } else dl(blob, fn);
+            }, 'image/png');
+        }
+
+        function rr(ctx, x, y, w, h, r) {
+            ctx.beginPath(); ctx.moveTo(x + r, y); ctx.lineTo(x + w - r, y); ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+            ctx.lineTo(x + w, y + h - r); ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h); ctx.lineTo(x + r, y + h);
+            ctx.quadraticCurveTo(x, y + h, x, y + h - r); ctx.lineTo(x, y + r); ctx.quadraticCurveTo(x, y, x + r, y); ctx.closePath();
+        }
+
+        function dl(blob, fn) {
+            const u = URL.createObjectURL(blob), a = document.createElement('a');
+            a.href = u; a.download = fn; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+            setTimeout(() => URL.revokeObjectURL(u), 100);
+        }
+
+        // PDF
+        async function getPDF() {
+            if (!cur) return;
+            const { jsPDF } = window.jspdf, doc = new jsPDF('p', 'mm', 'a4'), pw = doc.internal.pageSize.getWidth();
+
+            doc.setFillColor(17, 17, 20); doc.rect(0, 0, pw, 297, 'F');
+            doc.setTextColor(201, 162, 39); doc.setFontSize(28); doc.text('MJÖLNIR', pw / 2, 22, { align: 'center' });
+            doc.setTextColor(160, 160, 160); doc.setFontSize(10); doc.text('Calcolatore Potenza', pw / 2, 30, { align: 'center' });
+
+            doc.setDrawColor(201, 162, 39); doc.setLineWidth(0.4); doc.line(20, 38, pw - 20, 38);
+
+            doc.setTextColor(201, 162, 39); doc.setFontSize(14); doc.text(cur.n, pw / 2, 50, { align: 'center' });
+
+            doc.setFillColor(17, 17, 20); doc.roundedRect(20, 58, pw - 40, 40, 4, 4, 'F');
+            doc.setDrawColor(201, 162, 39); doc.roundedRect(20, 58, pw - 40, 40, 4, 4, 'S');
+
+            doc.setTextColor(201, 162, 39); doc.setFontSize(24); doc.text(cur.opt + '%', pw / 2 - 22, 82, { align: 'center' });
+            doc.setTextColor(240, 237, 230); doc.setFontSize(18); doc.text(cur.kg + ' kg', pw / 2 + 25, 82, { align: 'center' });
+            doc.setTextColor(160, 160, 160); doc.setFontSize(8);
+            doc.text('CARICO', pw / 2 - 22, 92, { align: 'center' });
+            doc.text('PESO', pw / 2 + 25, 92, { align: 'center' });
+
+            doc.setTextColor(232, 230, 227); doc.setFontSize(11); doc.text('Zone Forza-Velocità', 20, 115);
+
+            const zn = [{ l: 'Forza', k: 'f', c: [139, 38, 53] }, { l: 'F-Vel', k: 'fv', c: [196, 94, 32] }, { l: 'Pot', k: 'p', c: [45, 138, 78] }, { l: 'V-For', k: 'vf', c: [37, 99, 168] }, { l: 'Speed', k: 'v', c: [107, 76, 154] }];
+            const zw = (pw - 50) / 5;
+            zn.forEach((z, i) => {
+                const x = 20 + i * (zw + 2.5), zd = cur.z[z.k], kg = Math.round(cur.rm * zd.p / 100);
+                doc.setFillColor(17, 17, 20); doc.roundedRect(x, 122, zw, 36, 2, 2, 'F');
+                doc.setDrawColor(...z.c); doc.roundedRect(x, 122, zw, 36, 2, 2, 'S');
+                doc.setTextColor(...z.c); doc.setFontSize(7); doc.text(z.l.toUpperCase(), x + zw / 2, 130, { align: 'center' });
+                doc.setTextColor(240, 237, 230); doc.setFontSize(11); doc.text(kg + ' kg', x + zw / 2, 143, { align: 'center' });
+                doc.setTextColor(160, 160, 160); doc.setFontSize(6); doc.text(zd.p + '%', x + zw / 2, 152, { align: 'center' });
+            });
+
+            doc.setTextColor(240, 237, 230); doc.setFontSize(11); doc.text('Raccomandazioni', 20, 175);
+            const reps = cur.opt >= 60 ? '3-5' : '3-6', sets = cur.opt >= 60 ? '4-6' : '3-5';
+            const rc = [`Carico: ${cur.opt}% (${cur.kg} kg)`, `Volume: ${sets} x ${reps}`, 'Focus: esplosivo', 'Recupero: 2-3 min'];
+            doc.setFontSize(9);
+            rc.forEach((r, i) => {
+                doc.setTextColor(201, 162, 39); doc.text('→', 24, 184 + i * 7);
+                doc.setTextColor(160, 160, 160); doc.text(r, 30, 184 + i * 7);
+            });
+
+            doc.setDrawColor(201, 162, 39); doc.line(20, 277, pw - 20, 277);
+            doc.setTextColor(201, 162, 39); doc.setFontSize(10); doc.text('Nicholas Rubini', pw / 2, 285, { align: 'center' });
+            doc.setTextColor(160, 160, 160); doc.setFontSize(7); doc.text('nicholasrubini.it', pw / 2, 291, { align: 'center' });
+
+            const blob = doc.output('blob'), fn = `mjolnir-${cur.n.toLowerCase()}.pdf`;
+            if (navigator.share && /iPhone|iPad/i.test(navigator.userAgent)) {
+                try { await navigator.share({ files: [new File([blob], fn, { type: 'application/pdf' })], title: 'MJÖLNIR' }); } catch { dl(blob, fn); }
+            } else dl(blob, fn);
+        }
+
+        // 1RM
+        function calc1RM() {
+            const w = parseFloat(document.getElementById('mW').value), r = parseInt(document.getElementById('mR').value), f = document.getElementById('mF').value;
+            if (!w || !r || r < 1 || r > 15) { alert('Valori non validi'); return; }
+            let rm;
+            if (f === 'e') rm = w * (1 + r / 30);
+            else if (f === 'b') rm = w * (36 / (37 - r));
+            else rm = w / (1.013 - 0.0267123 * r);
+            rm = Math.round(rm);
+            document.getElementById('mResVal').textContent = rm + ' kg';
+            document.getElementById('mRes').classList.add('show');
+            document.getElementById('rm').value = rm;
+        }
+
+        // History
+        function save() {
+            if (!cur) return;
+            hist.unshift({ ...cur, id: Date.now() });
+            hist = hist.slice(0, 20);
+            localStorage.setItem('mj_h', JSON.stringify(hist));
+            renderH();
+        }
+
+        function renderH() {
+            const el = document.getElementById('histList'), em = document.getElementById('histEmpty');
+            if (!hist.length) { em.style.display = 'block'; el.innerHTML = ''; return; }
+            em.style.display = 'none';
+            el.innerHTML = hist.map(h => {
+                const d = new Date(h.t), ds = d.toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit' }) + ' ' + d.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+                return `<div class="history-item"><div class="history-head"><span class="history-ex">${h.n}</span><span class="history-date">${ds}</span></div><div class="history-stats"><div><div class="history-stat-val">${h.rm}</div><div class="history-stat-lbl">1RM</div></div><div><div class="history-stat-val">${h.opt}%</div><div class="history-stat-lbl">Carico</div></div><div><div class="history-stat-val">${h.kg}</div><div class="history-stat-lbl">Peso</div></div></div><div class="history-btns"><button class="btn-sm" onclick="loadH(${h.id})">Carica</button><button class="btn-sm del" onclick="delH(${h.id})">Elimina</button></div></div>`;
+            }).join('');
+        }
+
+        function loadH(id) {
+            const h = hist.find(x => x.id === id);
+            if (!h) return;
+            document.getElementById('ex').value = h.ex;
+            document.getElementById('rm').value = h.rm;
+            document.getElementById('goal').value = h.goal;
+            document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+            document.querySelectorAll('.panel').forEach(x => x.classList.remove('active'));
+            document.querySelector('[data-t="calc"]').classList.add('active');
+            document.getElementById('calc').classList.add('active');
+            updCta();
+        }
+
+        function delH(id) {
+            hist = hist.filter(x => x.id !== id);
+            localStorage.setItem('mj_h', JSON.stringify(hist));
+            renderH();
+        }
+
+        // Init
+        renderH();
+        window.addEventListener('resize', () => { if (cur) drawChart(); updCta(); });
+
+        // Service Worker for PWA
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('data:application/javascript;base64,' + btoa(`
+                self.addEventListener('install', e => self.skipWaiting());
+                self.addEventListener('activate', e => e.waitUntil(clients.claim()));
+                self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => caches.match(e.request))));
+            `)).catch(() => {});
+        }
+    </script>
+</body>
+</html>
